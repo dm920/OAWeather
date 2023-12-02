@@ -134,8 +134,7 @@ config.plugins.OAWeather.nighticons = ConfigYesNo(default=True)
 config.plugins.OAWeather.cachedata = ConfigSelection(default="0", choices=[("0", _("Disabled"))] + [(str(x), _("%d Minutes") % x) for x in (30, 60, 120)])
 config.plugins.OAWeather.refreshInterval = ConfigSelectionNumber(0, 1440, 30, default=120, wraparound=True)
 config.plugins.OAWeather.apikey = ConfigText(default="", fixed_size=False)
-#GEODATA = ("Hamburg, DE", "10.000654,53.550341")
-GEODATA = ("Frankfurt am Main, DE", "8.68417,50.11552")
+GEODATA = ("Hamburg, DE", "10.000654,53.550341")
 config.plugins.OAWeather.weathercity = ConfigText(default=GEODATA[0], visible_width=250, fixed_size=False)
 config.plugins.OAWeather.owm_geocode = ConfigText(default=GEODATA[1])
 config.plugins.OAWeather.tempUnit = ConfigSelection(default="Celsius", choices=[("Celsius", _("Celsius")), ("Fahrenheit", _("Fahrenheit"))])
@@ -182,7 +181,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
             
             <widget name="status" font="Regular; 25"  position="100,470" size="1000,40" foregroundColor ="#00fff000" transparent="1"  zPosition="3" halign="center" valign="center" />
             
-            <eLabel backgroundColor="#00313040" font="Regular; 28" position="00,510" size="1280,40" text="Press Ok for VirtualKeyBoard for City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#0000ff00" />
+            <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,510" size="1280,40" text="Virtual KeyBoard for City Name = Press OK" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#00ffffff" />
             
             <ePixmap position="30,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
             <ePixmap position="330,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/green.png"  transparent="1" alphatest="blend" />
