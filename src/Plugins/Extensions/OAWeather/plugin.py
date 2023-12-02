@@ -50,10 +50,6 @@ from Components.Button import Button
 
 
 
-
-# in zeile 140 kann man die defauft stadt angeben
-
-
 if sys.version_info[0] >= 3:
 
     from Tools.Directories import SCOPE_CONFIG, SCOPE_PLUGINS, SCOPE_SKINS, resolveFilename
@@ -75,8 +71,6 @@ myfile="/tmp/OAWeatherplugin.log"
 ## If file exists, delete it ##
 if isfile(myfile):
     remove(myfile)
-############################## Copy File ####################################
-
 
 ############################ Create Log file ################################
 
@@ -105,9 +99,6 @@ def logout(data):
 
 # ----------------------------- write file command -----------------------------
 logout(data="start")
-
-
-
 
 
 
@@ -159,15 +150,11 @@ else:
     logstatus = "on"
     logstatusin = "off"
 
-# Exportieren Sie die benötigten Variablen und Funktionen
 #__all__ = ['logstatusin']
 
 MODULE_NAME = "OAWeather"
 CACHEFILE = resolveFilename(SCOPE_CONFIG, "OAWeather.dat")
 PLUGINPATH = join(resolveFilename(SCOPE_PLUGINS), 'Extensions/OAWeather')
-
-
-
 
 
 class WeatherSettingsViewNew(ConfigListScreen, Screen):
@@ -176,23 +163,18 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
 
         <screen name="WeatherSettingsViewNew" title="Weather Plugin Setup"  position="center,center" size="1920,1080" backgroundColor="#00000000"  transparent="0"  >
             <eLabel position="0,0" size="1920,1080" backgroundColor="#00000000"    transparent="0" zPosition="0" />
-
             <widget name="config" position="100,20" size="1000,450" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
-            
             <widget name="status" font="Regular; 25"  position="100,470" size="1000,40" foregroundColor ="#00fff000" transparent="1"  zPosition="3" halign="center" valign="center" />
-            
-            <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,510" size="1280,40" text="Virtual KeyBoard for City Name = Press OK" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#00ffffff" />
-            
+            <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,480" size="1280,40" text="Virtual KeyBoard = Goto City Name and Press OK" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#0abab5" />
+            <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,530" size="1280,40" text="Please Restart E2 after saving your City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#cc7722" />
             <ePixmap position="30,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
             <ePixmap position="330,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/green.png"  transparent="1" alphatest="blend" />
             <ePixmap position="630,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/yellow.png"  transparent="1" alphatest="blend" />
             <ePixmap position="930,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/blue.png"  transparent="1" alphatest="blend" />
-
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_green" render="Label" position="310,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_yellow" render="Label" position="610,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_blue" render="Label" position="910,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
-
         </screen>
         """
 
@@ -492,13 +474,9 @@ class TestScreen(Screen):
     <screen name="TestScreen"   position="center,center" size="1920,1080" backgroundColor="#00000000"  transparent="0"  >
             <eLabel position="0,0" size="1920,1080" backgroundColor="#00000000"    transparent="0" zPosition="0" />
             <ePixmap position="10,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
-            
             <widget name="meinelist" position="100,20" size="1000,430" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
-
             <widget name="status" font="Regular; 25"  position="100,470" size="1000,40" foregroundColor ="#0000ff00" backgroundColor="#00000000" transparent="0"  zPosition="3" halign="center" valign="center" />
-
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="240,50" font="Regular;30" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
-            
     </screen>
     """
 #            <widget name="meinelist" position="100,20" size="1000,450" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
@@ -537,7 +515,7 @@ class TestScreen(Screen):
 
         self['key_red'] = Label(_('exit'))
         logout(data="Testscreen ende")
-        self['status'].setText(_("Select the City and Press Ok"))
+        self['status'].setText(_("Select your City and Press OK"))
         logout(data="Testscreen layout finish")
 
     def selectCity(self):
