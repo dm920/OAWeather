@@ -25,7 +25,7 @@ class OAWeatherPixmap(Renderer):
 	GUI_WIDGET = ePixmap
 
 	def postWidgetCreate(self, instance):
-		#instance.setScale(1)
+		instance.setScale(1)
 		#instance.setFlag(2)  # BT_KEEP_ASPECT_RATIO
 		#instance.setFlag(0x1)  # BT_HALIGN_CENTER
 		#instance.setFlag(0x2)  # BT_VALIGN_CENTER
