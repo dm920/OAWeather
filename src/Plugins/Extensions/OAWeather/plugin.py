@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+
 # Copyright (C) 2023 jbleyel, Mr.Servo, Stein17
 #
-# MSNWeather is free software: you can redistribute it and/or modify
+# OAWeather is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
@@ -12,9 +13,9 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with MSNWeather.  If not, see <http://www.gnu.org/licenses/>.
-#
-# Some parts are taken from MetrixHD skin and MSNWeather Plugin.
+# along with OAWeather.  If not, see <http://www.gnu.org/licenses/>.
+
+# Some parts are taken from MetrixHD skin and OAWeather Plugin.
 
 from os import remove, listdir
 from os.path import isfile, exists, getmtime, join
@@ -48,6 +49,8 @@ from Components.Button import Button
 #from Components.List import List
 
 
+
+
 if sys.version_info[0] >= 3:
 
     from Tools.Directories import SCOPE_CONFIG, SCOPE_PLUGINS, SCOPE_SKINS, resolveFilename
@@ -62,9 +65,10 @@ from datetime import datetime
 from shutil import copyfile
 from os import remove
 from os.path import isfile
+
 ########################### Delete Log file #################################
 
-myfile="/tmp/MSNWeatherplugin.log"
+myfile="/tmp/OAWeatherplugin.log"
 
 ## If file exists, delete it ##
 if isfile(myfile):
@@ -72,7 +76,7 @@ if isfile(myfile):
 
 ############################ Create Log file ################################
 
-logstatus = "on"
+logstatus = "off"
 
 #############################################################################
 
@@ -94,13 +98,14 @@ def logout(data):
         return
     return
 
-
 ############################# write file command #############################
+
 logout(data="start")
 
 
-config.plugins.MSNWeather = ConfigSubsection()
-config.plugins.MSNWeather.enabled = ConfigYesNo(default=True)
+
+config.plugins.OAWeather = ConfigSubsection()
+config.plugins.OAWeather.enabled = ConfigYesNo(default=True)
 
 ICONSETS = [("", _("Default"))]
 
@@ -111,27 +116,29 @@ else:
     logout(data="Python 2")
     ICONSETROOT = join(resolveFilename(SCOPE_SKIN), "WeatherIconSets")
 
+
 if exists(ICONSETROOT):
     for iconset in listdir(ICONSETROOT):
         if isfile(join(ICONSETROOT, iconset, "0.png")):
             ICONSETS.append((iconset, iconset))
 
-config.plugins.MSNWeather.iconset = ConfigSelection(default="", choices=ICONSETS)
-config.plugins.MSNWeather.nighticons = ConfigYesNo(default=True)
-config.plugins.MSNWeather.cachedata = ConfigSelection(default="0", choices=[("0", _("Disabled"))] + [(str(x), _("%d Minutes") % x) for x in (30, 60, 120)])
-config.plugins.MSNWeather.refreshInterval = ConfigSelectionNumber(0, 1440, 30, default=120, wraparound=True)
-config.plugins.MSNWeather.apikey = ConfigText(default="", fixed_size=False)
+config.plugins.OAWeather.iconset = ConfigSelection(default="", choices=ICONSETS)
+config.plugins.OAWeather.nighticons = ConfigYesNo(default=True)
+config.plugins.OAWeather.cachedata = ConfigSelection(default="0", choices=[("0", _("Disabled"))] + [(str(x), _("%d Minutes") % x) for x in (30, 60, 120)])
+config.plugins.OAWeather.refreshInterval = ConfigSelectionNumber(5, 1440, 30, default=120, wraparound=True)
+config.plugins.OAWeather.apikey = ConfigText(default="", fixed_size=False)
 GEODATA = ("Hamburg, DE", "10.000654,53.550341")
-config.plugins.MSNWeather.weathercity = ConfigText(default=GEODATA[0], visible_width=250, fixed_size=False)
-config.plugins.MSNWeather.owm_geocode = ConfigText(default=GEODATA[1])
-config.plugins.MSNWeather.tempUnit = ConfigSelection(default="Celsius", choices=[("Celsius", _("Celsius")), ("Fahrenheit", _("Fahrenheit"))])
-config.plugins.MSNWeather.weatherservice = ConfigSelection(default="MSN", choices=[("MSN", _("MSN weather")), ("OpenMeteo", _("Open-Meteo Wetter")), ("openweather", _("OpenWeatherMap"))])
+config.plugins.OAWeather.weathercity = ConfigText(default=GEODATA[0], visible_width=250, fixed_size=False)
+config.plugins.OAWeather.owm_geocode = ConfigText(default=GEODATA[1])
+config.plugins.OAWeather.tempUnit = ConfigSelection(default="Celsius", choices=[("Celsius", _("Celsius")), ("Fahrenheit", _("Fahrenheit"))])
+config.plugins.OAWeather.weatherservice = ConfigSelection(default="MSN", choices=[("MSN", _("MSN weather")), ("OpenMeteo", _("Open-Meteo Wetter")), ("openweather", _("OpenWeatherMap"))])
 
-#config.plugins.MSNWeather.weatherservice = ConfigSelection(default="MSN", choices=[("MSN")])
+#config.plugins.OAWeather.weatherservice = ConfigSelection(default="MSN", choices=[("MSN")])
 
-config.plugins.MSNWeather.debug = ConfigYesNo(default=False)
+config.plugins.OAWeather.debug = ConfigYesNo(default=False)
 
-USELOGFILE = config.plugins.MSNWeather.debug
+USELOGFILE = config.plugins.OAWeather.debug
+
 
 if USELOGFILE.value:
     logout(data="LOGFILE_On")
@@ -143,11 +150,13 @@ else:
     logstatus = "on"
     logstatusin = "off"
 
+# Export the variables and functions you need
 #__all__ = ['logstatusin']
 
-MODULE_NAME = "MSNWeather"
-CACHEFILE = resolveFilename(SCOPE_CONFIG, "MSNWeather.dat")
-PLUGINPATH = join(resolveFilename(SCOPE_PLUGINS), 'Extensions/MSNWeather')
+MODULE_NAME = "OAWeather"
+CACHEFILE = resolveFilename(SCOPE_CONFIG, "OAWeather.dat")
+PLUGINPATH = join(resolveFilename(SCOPE_PLUGINS), 'Extensions/OAWeather')
+
 
 class WeatherSettingsViewNew(ConfigListScreen, Screen):
     logout(data="WeatherSettingsViewNew")
@@ -159,10 +168,10 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
             <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,475" size="1280,40" text="Enter your City Name - Virtual KeyBoard = Press OK" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#0abab5" />
             <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,505" size="1280,40" text="Use Red Button after entering your City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#00ffffff" />
             <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,535" size="1280,40" text="Please Restart E2 after saving your City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#cc7722" />
-            <ePixmap position="30,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/red.png" transparent="1" alphatest="blend" />
-            <ePixmap position="330,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/green.png"  transparent="1" alphatest="blend" />
-            <ePixmap position="630,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/yellow.png"  transparent="1" alphatest="blend" />
-            <ePixmap position="930,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/blue.png"  transparent="1" alphatest="blend" />
+            <ePixmap position="30,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
+            <ePixmap position="330,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/green.png"  transparent="1" alphatest="blend" />
+            <ePixmap position="630,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/yellow.png"  transparent="1" alphatest="blend" />
+            <ePixmap position="930,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/blue.png"  transparent="1" alphatest="blend" />
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_green" render="Label" position="310,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_yellow" render="Label" position="610,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
@@ -177,20 +186,20 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
         self.status=""
         self["status"] = Label()
 
-        New_keymap = '/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/keymap.xml'
-        readKeymap(New_keymap)
+        Neue_keymap = '/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/keymap.xml'
+        readKeymap(Neue_keymap)
 
         self.list = []
-        self.list.append(getConfigListEntry(_("Enabled :"), config.plugins.MSNWeather.enabled))
-        self.list.append(getConfigListEntry(_("Weather service :"), config.plugins.MSNWeather.weatherservice))
-        self.list.append(getConfigListEntry(_("Weather city name :"), config.plugins.MSNWeather.weathercity))
-        self.list.append(getConfigListEntry(_("Weather API key :"), config.plugins.MSNWeather.apikey))
-        self.list.append(getConfigListEntry(_("Temperature unit :"), config.plugins.MSNWeather.tempUnit))
-        self.list.append(getConfigListEntry(_("Weather icon set :"), config.plugins.MSNWeather.iconset))
-        self.list.append(getConfigListEntry(_("Weather icon night switch :"), config.plugins.MSNWeather.nighticons))
-        self.list.append(getConfigListEntry(_("Refresh interval :"), config.plugins.MSNWeather.refreshInterval))
-        self.list.append(getConfigListEntry(_("Cache data :"), config.plugins.MSNWeather.cachedata))
-        self.list.append(getConfigListEntry(_("Enable Debug :"), config.plugins.MSNWeather.debug))
+        self.list.append(getConfigListEntry(_("Enabled :"), config.plugins.OAWeather.enabled))
+        self.list.append(getConfigListEntry(_("Weather service :"), config.plugins.OAWeather.weatherservice))
+        self.list.append(getConfigListEntry(_("Weather city name :"), config.plugins.OAWeather.weathercity))
+        self.list.append(getConfigListEntry(_("Weather API key :"), config.plugins.OAWeather.apikey))
+        self.list.append(getConfigListEntry(_("Temperature unit :"), config.plugins.OAWeather.tempUnit))
+        self.list.append(getConfigListEntry(_("Weather icon set :"), config.plugins.OAWeather.iconset))
+        self.list.append(getConfigListEntry(_("Weather icon night switch :"), config.plugins.OAWeather.nighticons))
+        self.list.append(getConfigListEntry(_("Refresh interval :"), config.plugins.OAWeather.refreshInterval))
+        self.list.append(getConfigListEntry(_("Cache data :"), config.plugins.OAWeather.cachedata))
+        self.list.append(getConfigListEntry(_("Enable Debug :"), config.plugins.OAWeather.debug))
 
         #logout(data=str(self.list))
         ConfigListScreen.__init__(self, self.list, session=session)
@@ -200,7 +209,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
         self["key_yellow"] = StaticText(_("Defaults"))
         self["key_red"] = StaticText(_("Location Selection"))
 
-        self["blueActions"] = HelpableActionMap(self, ['ColorActions', 'OkCancelActions', 'MSNWeatherActions'],
+        self["blueActions"] = HelpableActionMap(self, ['ColorActions', 'OkCancelActions', 'OAWeatherActions'],
         #self["blueActions"] = ActionMap(self, ["OkCancelActions',ColorActions"],
         #self['actions'] = ActionMap(['OkCancelActions', 'ColorActions'],
                                 {
@@ -215,7 +224,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
                                                 #prio=0, description=_("Weather Settings Actions"))
 
         logout(data="WeatherSettingsViewNew-buttons")
-        self.old_weatherservice = config.plugins.MSNWeather.weatherservice.value
+        self.old_weatherservice = config.plugins.OAWeather.weatherservice.value
         logout(data="WeatherSettingsViewNew-old")
         self.citylist = []
         logout(data="WeatherSettingsViewNew-city")
@@ -241,7 +250,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
                 logout(data="api")
                 text = current_item[1].value
 
-                if text == config.plugins.MSNWeather.apikey.value:
+                if text == config.plugins.OAWeather.apikey.value:
                     logout(data="keyboard")
                     title = _('Please enter a valid city name.')
                     self.session.openWithCallback(self.VirtualKeyBoardCallBack, VirtualKeyBoard, title=title)
@@ -254,9 +263,10 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
         except:
             pass
 
+
     def keycheckCity(self, closesave=False):
         logout(data="def -----------  keycheckCity")
-        weathercity = config.plugins.MSNWeather.weathercity.value.split(",")[0]
+        weathercity = config.plugins.OAWeather.weathercity.value.split(",")[0]
         logout(data="--------------------------  weatherCity")
         logout(data=str(weathercity))
 
@@ -272,10 +282,10 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
         logout(data="searchCity services 1 ")
         services = {"MSN": "msn", "OpenMeteo": "omw", "openweather": "owm"}
         logout(data=str(services))
-        service = services.get(config.plugins.MSNWeather.weatherservice.value, "msn")
+        service = services.get(config.plugins.OAWeather.weatherservice.value, "msn")
         logout(data=str(service))
         logout(data="searchCity apikey 2 ")
-        apikey = config.plugins.MSNWeather.apikey.value
+        apikey = config.plugins.OAWeather.apikey.value
         logout(data=str(apikey))
         logout(data="apikey 3 ")
         if service == "owm" and len(apikey) < 32:
@@ -283,7 +293,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
             self.session.open(MessageBox, text=_("The API key for OpenWeatherMap is not defined or invalid.\nPlease verify your input data.\nOtherwise your settings won't be saved."), type=MessageBox.TYPE_WARNING)
         else:
             logout(data="searchCity services own else 4 ")
-            WI = Weatherinfo(service, config.plugins.MSNWeather.apikey.value)
+            WI = Weatherinfo(service, config.plugins.OAWeather.apikey.value)
             logout(data=str(WI))
             if WI.error:
                 logout(data="searchCity services-error")
@@ -349,6 +359,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
                     #selected_city_str = self.selected_city
                     #logout(data=str(selected_city_str))
 
+
                     #self.choiceIdxCallback(self.test_screen.selectCity())
 
     def testScreenOkCallback(self, selected_city_str):
@@ -387,7 +398,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
 
         else:
             logout("The selected City does not have enough information.")
-################################################################################
+# ------------------  ('Hamburg', '53.550341', '10.000654') is city - latitude - longitude selfgeodata 1 - then 2
     def saveGeoCode(self, city, longitude, latitude):
         logout(data="saveGeoCode value ")
         logout(data=str(city))
@@ -395,34 +406,34 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
         logout(data=str(longitude))
         logout(data="latitude - lat - breitengrad")
         logout(data=str(latitude))
-        config.plugins.MSNWeather.weathercity.value = city
-        config.plugins.MSNWeather.owm_geocode.value = "%s,%s" % (longitude, latitude)
+        config.plugins.OAWeather.weathercity.value = city
+        config.plugins.OAWeather.owm_geocode.value = "%s,%s" % (longitude, latitude)
 
-        self.old_weatherservice = config.plugins.MSNWeather.weatherservice.value
+        self.old_weatherservice = config.plugins.OAWeather.weatherservice.value
         self.checkcity = False
         if self.closeonsave:
-            config.plugins.MSNWeather.owm_geocode.save()
+            config.plugins.OAWeather.owm_geocode.save()
             weatherhandler.reset()
             #Setup.keySave(self)
             self.keySave()
 
     def keySelect(self):
         logout(data="keySelect")
-        if self.getCurrentItem() == config.plugins.MSNWeather.weathercity:
+        if self.getCurrentItem() == config.plugins.OAWeather.weathercity:
             self.checkcity = True
         Setup.keySelect(self)
 
     def keySave(self):
         logout(data="keySave")
-        weathercity = config.plugins.MSNWeather.weathercity.value.split(",")[0]
+        weathercity = config.plugins.OAWeather.weathercity.value.split(",")[0]
         if len(weathercity) < 3:
             #self["footnote"].setText(_("The city name is too short. More than 2 characters are needed for search."))
             return
-        if self.checkcity or self.old_weatherservice != config.plugins.MSNWeather.weatherservice.value:
+        if self.checkcity or self.old_weatherservice != config.plugins.OAWeather.weatherservice.value:
             self.keycheckCity(True)
             return
         weatherhandler.reset()
-        config.plugins.MSNWeather.owm_geocode.save()
+        config.plugins.OAWeather.owm_geocode.save()
         #Setup.keySave(self)
         super(WeatherSettingsViewNew, self).keySave()
 
@@ -434,20 +445,20 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
                 logout(data="defaults2")
                 self.setInputToDefault(x[1], SAVE)
         logout(data="defaults3")
-        self.setInputToDefault(config.plugins.MSNWeather.owm_geocode, SAVE)
+        self.setInputToDefault(config.plugins.OAWeather.owm_geocode, SAVE)
         if self.session:
             logout(data="defaults4")
             self.list = []
-            self.list.append(getConfigListEntry(_("Enabled :"), config.plugins.MSNWeather.enabled))
-            self.list.append(getConfigListEntry(_("Weather service :"), config.plugins.MSNWeather.weatherservice))
-            self.list.append(getConfigListEntry(_("Weather city name :"), config.plugins.MSNWeather.weathercity))
-            self.list.append(getConfigListEntry(_("Weather API key :"), config.plugins.MSNWeather.apikey))
-            self.list.append(getConfigListEntry(_("Temperature unit :"), config.plugins.MSNWeather.tempUnit))
-            self.list.append(getConfigListEntry(_("Weather icon set :"), config.plugins.MSNWeather.iconset))
-            self.list.append(getConfigListEntry(_("Weather icon night switch :"), config.plugins.MSNWeather.nighticons))
-            self.list.append(getConfigListEntry(_("Refresh interval :"), config.plugins.MSNWeather.refreshInterval))
-            self.list.append(getConfigListEntry(_("Cache data :"), config.plugins.MSNWeather.cachedata))
-            self.list.append(getConfigListEntry(_("Enable Debug :"), config.plugins.MSNWeather.debug))
+            self.list.append(getConfigListEntry(_("Enabled :"), config.plugins.OAWeather.enabled))
+            self.list.append(getConfigListEntry(_("Weather service :"), config.plugins.OAWeather.weatherservice))
+            self.list.append(getConfigListEntry(_("Weather city name :"), config.plugins.OAWeather.weathercity))
+            self.list.append(getConfigListEntry(_("Weather API key :"), config.plugins.OAWeather.apikey))
+            self.list.append(getConfigListEntry(_("Temperature unit :"), config.plugins.OAWeather.tempUnit))
+            self.list.append(getConfigListEntry(_("Weather icon set :"), config.plugins.OAWeather.iconset))
+            self.list.append(getConfigListEntry(_("Weather icon night switch :"), config.plugins.OAWeather.nighticons))
+            self.list.append(getConfigListEntry(_("Refresh interval :"), config.plugins.OAWeather.refreshInterval))
+            self.list.append(getConfigListEntry(_("Cache data :"), config.plugins.OAWeather.cachedata))
+            self.list.append(getConfigListEntry(_("Enable Debug :"), config.plugins.OAWeather.debug))
             self['config'].setList(self.list)
             self['status'].setText(_("Standard finished"))
 
@@ -456,17 +467,19 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
         if SAVE:
             configItem.save()
 
+
 class TestScreen(Screen):
     skin = """
     <screen name="TestScreen" position="center,center" size="1920,1080" backgroundColor="#00000000" transparent="0"  >
             <eLabel position="0,0" size="1920,1080" backgroundColor="#00000000" transparent="0" zPosition="0" />
-            <ePixmap position="10,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/red.png" transparent="1" alphatest="blend" />
+            <ePixmap position="10,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
             <widget name="meinelist" position="100,20" size="1000,430" font="Regular;30" itemHeight="45" backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
             <widget name="status" font="Regular; 25" position="100,470" size="1000,40" foregroundColor ="#0000ff00" backgroundColor="#00000000" transparent="0" zPosition="3" halign="center" valign="center" />
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="240,50" font="Regular;30" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
     </screen>
     """
-#            <widget name="mylist" position="100,20" size="1000,450" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
+#            <widget name="meinelist" position="100,20" size="1000,450" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
+
 
     def __init__(self, session, citylisttest, okCallback=None):
         logout(data="Testscreen init")
@@ -514,23 +527,24 @@ class TestScreen(Screen):
             logout(data="498 Selected City: {}".format(selected_city))  # Write selected city to the log file
             if self.okCallback is not None:
                 self.okCallback(selected_city)
-            self.close()  # After selecting, close screen
+            self.close()  # Close screen after selection
+
 
 class WeatherHandler():
     logout(data="WeatherHandler")
     def __init__(self):
         logout(data="WeatherHandler init")
         self.session = None
-        self.enabledebug = config.plugins.MSNWeather.debug.value
+        self.enabledebug = config.plugins.OAWeather.debug.value
         modes = {"MSN": "msn", "openweather": "owm", "OpenMeteo": "omw"}
-        mode = modes.get(config.plugins.MSNWeather.weatherservice.value, "msn")
+        mode = modes.get(config.plugins.OAWeather.weatherservice.value, "msn")
         logout(data="WeatherHandler mode wetter")
         logout(data=str(mode))
-        self.WI = Weatherinfo(mode, config.plugins.MSNWeather.apikey.value)
+        self.WI = Weatherinfo(mode, config.plugins.OAWeather.apikey.value)
         logout(data="WeatherHandler Apy Key in WI")
-        apy_key = config.plugins.MSNWeather.apikey.value
+        apy_key = config.plugins.OAWeather.apikey.value
         logout(str(apy_key))
-        self.geocode = config.plugins.MSNWeather.owm_geocode.value.split(",")
+        self.geocode = config.plugins.OAWeather.owm_geocode.value.split(",")
         self.weathercity = None
         self.trialcounter = 0
         self.currentWeatherDataValid = 3  # 0= green (data available), 1= yellow (still working), 2= red (no data available, wait on next refresh) 3=startup
@@ -550,6 +564,7 @@ class WeatherHandler():
         self.getCacheData()
         logout(data="WeatherHandler session start 3")
 
+
     def writeData(self, data):
         logout(data="WeatherHandler write data")
         #self.debug("writeData")
@@ -563,14 +578,17 @@ class WeatherHandler():
             callback(data)
             logout(data="WeatherHandler write data 5")
         logout(data="WeatherHandler write data 6")
-        seconds = int(config.plugins.MSNWeather.refreshInterval.value * 60)
-        logout(data="WeatherHandler write data 7")
+        seconds = int(config.plugins.OAWeather.refreshInterval.value) * 60
+        logout(data="WeatherHandler write data 7 ------------ secounds")
+        logout(data=str(config.plugins.OAWeather.refreshInterval.value))
+        logout(data=str(seconds))
         self.refreshTimer.start(seconds * 1000, True)
         logout(data="WeatherHandler write data 8")
 
     def getData(self):
         logout(data="WeatherHandler getdata")
         return self.wetterdata
+
 
     if sys.version_info[0] >= 3:
         logout(data="Python 3 getValid")
@@ -590,9 +608,10 @@ class WeatherHandler():
         def getSkydirs(self):
             return self.skydirs
 
+
     def getCacheData(self):
         logout(data="WeatherHandler getcachedata")
-        cacheminutes = int(config.plugins.MSNWeather.cachedata.value)
+        cacheminutes = int(config.plugins.OAWeather.cachedata.value)
         logout(data="WeatherHandler getcachedata 1")
         if cacheminutes and isfile(CACHEFILE):
             logout(data="WeatherHandler getcachedata 2")
@@ -620,20 +639,20 @@ class WeatherHandler():
             #self.debug("firstrun")
             self.refreshTimer.start(600000, True)
             return
-        if config.plugins.MSNWeather.enabled.value:
+        if config.plugins.OAWeather.enabled.value:
             logout(data="WeatherHandler refresh 2")
-            self.weathercity = config.plugins.MSNWeather.weathercity.value
-            geocode = config.plugins.MSNWeather.owm_geocode.value.split(",")
+            self.weathercity = config.plugins.OAWeather.weathercity.value
+            geocode = config.plugins.OAWeather.owm_geocode.value.split(",")
             # DEPRECATED, will be removed in April 2023
             if geocode == ['0.0', '0.0']:
                 logout(data="WeatherHandler refresh 3")
-                geodatalist = self.WI.getCitylist(config.plugins.MSNWeather.weathercity.value.split(",")[0], config.osd.language.value.replace('_', '-').lower())
+                geodatalist = self.WI.getCitylist(config.plugins.OAWeather.weathercity.value.split(",")[0], config.osd.language.value.replace('_', '-').lower())
                 if geodatalist is not None and len(geodatalist[0]) == 3:
                     geocode = [geodatalist[0][1], geodatalist[0][2]]
-                    config.plugins.MSNWeather.weathercity.value = geodatalist[0][0]
-                    config.plugins.MSNWeather.weathercity.save()
-                    config.plugins.MSNWeather.owm_geocode.value = "%s,%s" % (float(geocode[0]), float(geocode[1]))
-                    config.plugins.MSNWeather.owm_geocode.save()
+                    config.plugins.OAWeather.weathercity.value = geodatalist[0][0]
+                    config.plugins.OAWeather.weathercity.save()
+                    config.plugins.OAWeather.owm_geocode.value = "%s,%s" % (float(geocode[0]), float(geocode[1]))
+                    config.plugins.OAWeather.owm_geocode.save()
             # DEPRECATED, will be removed in April 2023
             if geocode and len(geocode) == 2:
                 logout(data="WeatherHandler refresh 4")
@@ -644,13 +663,13 @@ class WeatherHandler():
             #language = config.osd.language.value.replace("_", "-")
             language = config.osd.language.value.lower().replace('_', '-')
             logout(data=str(language))
-            unit = "imperial" if config.plugins.MSNWeather.tempUnit.value == "Fahrenheit" else "metric"
+            unit = "imperial" if config.plugins.OAWeather.tempUnit.value == "Fahrenheit" else "metric"
             if geodata:
                 logout(data="WeatherHandler refresh 6")
                 self.WI.start(geodata=geodata, cityID=None, units=unit, scheme=language, reduced=True, callback=self.refreshWeatherDataCallback)
             else:
                 logout(data="WeatherHandler refresh 7")
-                print("[%s] error in MSNWeather config" % (MODULE_NAME))
+                print("[%s] error in OAWeather config" % (MODULE_NAME))
                 self.currentWeatherDataValid = 2
 
     def refreshWeatherDataCallback(self, data, error):
@@ -682,10 +701,10 @@ class WeatherHandler():
         logout(data="WeatherHandler refresh callback 5")
         self.writeData(data)
         logout(data="WeatherHandler refresh callback 6")
-        self.msnFullData = self.WI.info if config.plugins.MSNWeather.weatherservice.value == "MSN" else None
+        self.msnFullData = self.WI.info if config.plugins.OAWeather.weatherservice.value == "MSN" else None
         logout(data="WeatherHandler refresh callback 7")
         # TODO write cache only on close
-        if config.plugins.MSNWeather.cachedata.value != "0":
+        if config.plugins.OAWeather.cachedata.value != "0":
             logout(data="WeatherHandler refresh callback 8")
             with open(CACHEFILE, "wb") as fd:
                 dump(data, fd, -1)
@@ -697,16 +716,16 @@ class WeatherHandler():
         if isfile(CACHEFILE):
             remove(CACHEFILE)
         modes = {"MSN": "msn", "openweather": "owm", "OpenMeteo": "omw"}
-        mode = modes.get(config.plugins.MSNWeather.weatherservice.value, "msn")
-        self.WI.setmode(mode, config.plugins.MSNWeather.apikey.value)
+        mode = modes.get(config.plugins.OAWeather.weatherservice.value, "msn")
+        self.WI.setmode(mode, config.plugins.OAWeather.apikey.value)
         if self.WI.error:
             print(self.WI.error)
             self.WI.setmode()  # fallback to MSN
 
         if self.session:
-            iconpath = config.plugins.MSNWeather.iconset.value
+            iconpath = config.plugins.OAWeather.iconset.value
             iconpath = join(ICONSETROOT, iconpath) if iconpath else join(PLUGINPATH, "Icons")
-            self.session.screen["MSNWeather"].iconpath = iconpath
+            self.session.screen["OAWeather"].iconpath = iconpath
         self.refreshWeatherData()
 
     if sys.version_info[0] >= 3:
@@ -722,41 +741,45 @@ class WeatherHandler():
 
     logout(data="WeatherHandler ende")
 
+
 def main(session, **kwargs):
     logout(data="main")
-    session.open(MSNWeatherPlugin)
+    session.open(OAWeatherPlugin)
 
 
 def setup(session, **kwargs):
     logout(data="setup")
     session.open(WeatherSettingsViewNew)
 
+
 def sessionstart(session, **kwargs):
     logout(data="sessionstart")
-    from Components.Sources.MSNWeather import MSNWeather
-    session.screen["MSNWeather"] = MSNWeather()
-    session.screen["MSNWeather"].precipitationtext = _("Precipitation")
-    session.screen["MSNWeather"].humiditytext = _("Humidity")
-    session.screen["MSNWeather"].feelsliketext = _("Feels like")
-    session.screen["MSNWeather"].pluginpath = PLUGINPATH
-    iconpath = config.plugins.MSNWeather.iconset.value
+    from Components.Sources.OAWeather import OAWeather
+    session.screen["OAWeather"] = OAWeather()
+    session.screen["OAWeather"].precipitationtext = _("Precipitation")
+    session.screen["OAWeather"].humiditytext = _("Humidity")
+    session.screen["OAWeather"].feelsliketext = _("Feels like")
+    session.screen["OAWeather"].pluginpath = PLUGINPATH
+    iconpath = config.plugins.OAWeather.iconset.value
     if iconpath:
         iconpath = join(ICONSETROOT, iconpath)
     else:
         iconpath = join(PLUGINPATH, "Icons")
-    session.screen["MSNWeather"].iconpath = iconpath
+    session.screen["OAWeather"].iconpath = iconpath
     weatherhandler.sessionStart(session)
 
+
 def Plugins(**kwargs):
-    logout(data="MSNWeatherPlugin")
+    logout(data="OAWeatherPlugin")
     logout(data="plugins")
     pluginList = []
-    pluginList.append(PluginDescriptor(name="MSNWeather", where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=sessionstart, needsRestart=False))
+    pluginList.append(PluginDescriptor(name="OAWeather", where=[PluginDescriptor.WHERE_SESSIONSTART], fnc=sessionstart, needsRestart=False))
     pluginList.append(PluginDescriptor(name="Weather Plugin", description=_("Show Weather Forecast"), icon="plugin.png", where=[PluginDescriptor.WHERE_PLUGINMENU], fnc=main))
     return pluginList
 
-class MSNWeatherPlugin(Screen):
-    logout(data="MSNWeatherPluginScreen")
+
+class OAWeatherPlugin(Screen):
+    logout(data="OAWeatherPluginScreen")
     def __init__(self, session):
         params = {
             "picpath": join(PLUGINPATH, "Images")
@@ -767,7 +790,7 @@ class MSNWeatherPlugin(Screen):
         logout(data="screen2")
         for screen in xml.findall('screen'):
             logout(data="screen in xml")
-            if screen.get("name") == "MSNWeatherPlugin":
+            if screen.get("name") == "OAWeatherPlugin":
                 logout(data="screen get name")
                 skintext = tostring(screen).decode()
                 for key in list(params.keys()):
@@ -784,12 +807,12 @@ class MSNWeatherPlugin(Screen):
         Screen.__init__(self, session)
         self.title = _("Weather Plugin")
 
-        New_keymap = '/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/keymap.xml'
+        New_keymap = '/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/keymap.xml'
         readKeymap(New_keymap)
 
         self["key_blue"] = StaticText(_("Menu"))
 
-        self["actions"] = ActionMap(["SetupActions", "DirectionActions", 'ColorActions', 'MSNWeatherActions'],
+        self["actions"] = ActionMap(["SetupActions", "DirectionActions", 'ColorActions', 'OAWeatherActions'],
         {
             "green": self.configmenu,
             "cancel": self.close,
@@ -810,6 +833,7 @@ class MSNWeatherPlugin(Screen):
         self.onLayoutFinish.append(self.startRun)
         logout(data="finish")
 
+
     def startRun(self):
         logout(data="startrun")
         self.data = weatherhandler.getData() or {}
@@ -819,6 +843,7 @@ class MSNWeatherPlugin(Screen):
             logout(data="startrun-callback")
             self.getWeatherDataCallback()
             logout(data="startrun-callback 1")
+
 
     def clearFields(self):
         logout(data="clearfields")
@@ -833,6 +858,7 @@ class MSNWeatherPlugin(Screen):
         logout(data="Python 2 getval")
         def getVal(self, key):
             return self.data.get(key, self.na) if self.data else self.na
+
 
     if sys.version_info[0] >= 3:
         logout(data="Python 3 getCurrentVal")
@@ -852,6 +878,7 @@ class MSNWeatherPlugin(Screen):
                 if key in current:
                     value = current.get(key, default)
             return value
+
 
     def getWeatherDataCallback(self):
         logout(data="getWeatherDataCallback")
@@ -889,5 +916,6 @@ class MSNWeatherPlugin(Screen):
     def error(self, errortext):
         self.clearFields()
         self["statustext"].text = errortext
+
 
 weatherhandler = WeatherHandler()
