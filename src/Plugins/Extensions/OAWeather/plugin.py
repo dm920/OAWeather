@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with OAWeather.  If not, see <http://www.gnu.org/licenses/>.
 
-# Some parts are taken from MetrixHD skin and OAWeather Plugin.
-
+# Some parts are taken from MetrixHD skin and MSNWeather Plugin.
+from __future__ import print_function
 from os import remove, listdir
 from os.path import isfile, exists, getmtime, join
 from pickle import dump, load
@@ -51,6 +51,9 @@ from Components.Button import Button
 
 
 
+# in zeile 140 kann man die defauft stadt angeben
+
+
 if sys.version_info[0] >= 3:
 
     from Tools.Directories import SCOPE_CONFIG, SCOPE_PLUGINS, SCOPE_SKINS, resolveFilename
@@ -59,26 +62,28 @@ else:
 
     from Tools.Directories import resolveFilename, SCOPE_SKIN, SCOPE_CONFIG, SCOPE_PLUGINS
 
-################################## Logfile ##################################
+# --------------------------- Logfile -------------------------------
 
 from datetime import datetime
 from shutil import copyfile
 from os import remove
 from os.path import isfile
-
-########################### Delete Log file #################################
+########################### log file loeschen ##################################
 
 myfile="/tmp/OAWeatherplugin.log"
 
 ## If file exists, delete it ##
 if isfile(myfile):
     remove(myfile)
+############################## File copieren ############################################
 
-############################ Create Log file ################################
+
+###########################  log file anlegen ##################################
+# kitte888 logfile anlegen die eingabe in logstatus
 
 logstatus = "off"
 
-#############################################################################
+# ________________________________________________________________________________
 
 def write_log(msg):
     if logstatus == ('on'):
@@ -89,7 +94,7 @@ def write_log(msg):
             return
     return
 
-############################# test ON/OFF Logfile ############################
+# ****************************  test ON/OFF Logfile ************************************************
 
 
 def logout(data):
@@ -98,9 +103,12 @@ def logout(data):
         return
     return
 
-############################# write file command #############################
 
+# ----------------------------- so muss das commando aussehen , um in den file zu schreiben  ------------------------------
 logout(data="start")
+
+
+
 
 
 
@@ -127,17 +135,20 @@ config.plugins.OAWeather.nighticons = ConfigYesNo(default=True)
 config.plugins.OAWeather.cachedata = ConfigSelection(default="0", choices=[("0", _("Disabled"))] + [(str(x), _("%d Minutes") % x) for x in (30, 60, 120)])
 config.plugins.OAWeather.refreshInterval = ConfigSelectionNumber(5, 1440, 30, default=120, wraparound=True)
 config.plugins.OAWeather.apikey = ConfigText(default="", fixed_size=False)
-GEODATA = ("Hamburg, DE", "10.000654,53.550341")
+#GEODATA = ("Hamburg, DE", "10.000654,53.550341")
+GEODATA = ("Frankfurt am Main, DE", "8.68417,50.11552")
 config.plugins.OAWeather.weathercity = ConfigText(default=GEODATA[0], visible_width=250, fixed_size=False)
 config.plugins.OAWeather.owm_geocode = ConfigText(default=GEODATA[1])
 config.plugins.OAWeather.tempUnit = ConfigSelection(default="Celsius", choices=[("Celsius", _("Celsius")), ("Fahrenheit", _("Fahrenheit"))])
 config.plugins.OAWeather.weatherservice = ConfigSelection(default="MSN", choices=[("MSN", _("MSN weather")), ("OpenMeteo", _("Open-Meteo Wetter")), ("openweather", _("OpenWeatherMap"))])
+
 
 #config.plugins.OAWeather.weatherservice = ConfigSelection(default="MSN", choices=[("MSN")])
 
 config.plugins.OAWeather.debug = ConfigYesNo(default=False)
 
 USELOGFILE = config.plugins.OAWeather.debug
+
 
 
 if USELOGFILE.value:
@@ -150,7 +161,7 @@ else:
     logstatus = "on"
     logstatusin = "off"
 
-# Export the variables and functions you need
+# Exportieren Sie die benötigten Variablen und Funktionen
 #__all__ = ['logstatusin']
 
 MODULE_NAME = "OAWeather"
@@ -158,24 +169,32 @@ CACHEFILE = resolveFilename(SCOPE_CONFIG, "OAWeather.dat")
 PLUGINPATH = join(resolveFilename(SCOPE_PLUGINS), 'Extensions/OAWeather')
 
 
+
+
+
 class WeatherSettingsViewNew(ConfigListScreen, Screen):
     logout(data="WeatherSettingsViewNew")
     skin = """
-        <screen name="WeatherSettingsViewNew" title="Weather Plugin Setup" position="center,center" size="1920,1080" backgroundColor="#00000000" transparent="0"  >
-            <eLabel position="0,0" size="1920,1080" backgroundColor="#00000000" transparent="0" zPosition="0" />
+
+        <screen name="WeatherSettingsViewNew" title="Weather Plugin Setup"  position="center,center" size="1200,650" backgroundColor="#00000000"  transparent="0"  >
+            <eLabel position="0,0" size="1200,650" backgroundColor="#00000000"    transparent="0" zPosition="0" />
+
             <widget name="config" position="100,20" size="1000,450" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
+            
             <widget name="status" font="Regular; 25"  position="100,470" size="1000,40" foregroundColor ="#00fff000" transparent="1"  zPosition="3" halign="center" valign="center" />
-            <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,475" size="1280,40" text="Enter your City Name - Virtual KeyBoard = Press OK" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#0abab5" />
-            <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,505" size="1280,40" text="Use Red Button after entering your City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#00ffffff" />
-            <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,535" size="1280,40" text="Please Restart E2 after saving your City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#cc7722" />
+            
+            <eLabel backgroundColor="#00313040" font="Regular; 28" position="00,510" size="1280,40" text="Press Ok for Virtuell Keyboard for City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#0000ff00" />
+            
             <ePixmap position="30,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
             <ePixmap position="330,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/green.png"  transparent="1" alphatest="blend" />
             <ePixmap position="630,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/yellow.png"  transparent="1" alphatest="blend" />
             <ePixmap position="930,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/blue.png"  transparent="1" alphatest="blend" />
+
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_green" render="Label" position="310,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_yellow" render="Label" position="610,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_blue" render="Label" position="910,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
+
         </screen>
         """
 
@@ -264,6 +283,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
             pass
 
 
+
     def keycheckCity(self, closesave=False):
         logout(data="def -----------  keycheckCity")
         weathercity = config.plugins.OAWeather.weathercity.value.split(",")[0]
@@ -348,7 +368,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
 
 
                     logout(data="searchCity services for choicebox zu my screen ")
-############################## old Choice Box call #############################
+# ---------------------     hier ist der alte aufruf der choicebox
                     #self.session.openWithCallback(self.choiceIdxCallback, ChoiceBox, titlebartext=_("Select Your Location"), title="", list=tuple(self.citylist))
                     self.citylisttest = self.citylist
                     logout(data=str(self.citylisttest))
@@ -388,7 +408,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
                 elif 'lat=' in part:
                     latitude = part.split('=')[1].strip((']'))
 
-            # You can process or save the values
+            # Nun können Sie die Werte weiterverarbeiten oder speichern
             logout("Stadt: " + city)
             logout("Längengrad: " + longitude)
             logout("Breitengrad: " + latitude)
@@ -397,8 +417,8 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
                 self.saveGeoCode(city, longitude, latitude)
 
         else:
-            logout("The selected City does not have enough information.")
-# ------------------  ('Hamburg', '53.550341', '10.000654') is city - latitude - longitude selfgeodata 1 - then 2
+            logout("Die ausgewählte Stadt hat nicht genügend Informationen.")
+# ------------------  'Frankfurt am Main', '50.11552', '8.68417) ist city - latitude - longitude selfgeodata 1 - dann 2
     def saveGeoCode(self, city, longitude, latitude):
         logout(data="saveGeoCode value ")
         logout(data=str(city))
@@ -460,7 +480,7 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
             self.list.append(getConfigListEntry(_("Cache data :"), config.plugins.OAWeather.cachedata))
             self.list.append(getConfigListEntry(_("Enable Debug :"), config.plugins.OAWeather.debug))
             self['config'].setList(self.list)
-            self['status'].setText(_("Standard finished"))
+            self['status'].setText(_("Standard fertig"))
 
     def setInputToDefault(self, configItem, SAVE):
         configItem.setValue(configItem.default)
@@ -470,12 +490,17 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
 
 class TestScreen(Screen):
     skin = """
-    <screen name="TestScreen" position="center,center" size="1920,1080" backgroundColor="#00000000" transparent="0"  >
-            <eLabel position="0,0" size="1920,1080" backgroundColor="#00000000" transparent="0" zPosition="0" />
+
+    <screen name="TestScreen"   position="center,center" size="1200,650" backgroundColor="#00000000"  transparent="0"  >
+            <eLabel position="0,0" size="1200,650" backgroundColor="#00000000"    transparent="0" zPosition="0" />
             <ePixmap position="10,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
-            <widget name="meinelist" position="100,20" size="1000,430" font="Regular;30" itemHeight="45" backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
-            <widget name="status" font="Regular; 25" position="100,470" size="1000,40" foregroundColor ="#0000ff00" backgroundColor="#00000000" transparent="0" zPosition="3" halign="center" valign="center" />
+            
+            <widget name="meinelist" position="100,20" size="1000,430" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
+
+            <widget name="status" font="Regular; 25"  position="100,470" size="1000,40" foregroundColor ="#0000ff00" backgroundColor="#00000000" transparent="0"  zPosition="3" halign="center" valign="center" />
+
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="240,50" font="Regular;30" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
+            
     </screen>
     """
 #            <widget name="meinelist" position="100,20" size="1000,450" font="Regular;30" itemHeight="45"  backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
@@ -494,11 +519,11 @@ class TestScreen(Screen):
         zeile1 = self.citylisttest
         logout(data=str(zeile1))
 
-        # Create dummy data
+        # Dummy-Daten erstellen
         dummy_data = ["Item 1", "Item 2", "Item 3"]
         zeile2 = dummy_data
         logout(data=str(zeile2))
-        # Create MenuList widget and add data
+        #MenuList-Widget erstellen und Daten hinzufügen
         self['meinelist'] = MenuList(citylisttest)
 
         self.status = ""
@@ -514,7 +539,7 @@ class TestScreen(Screen):
 
         self['key_red'] = Label(_('exit'))
         logout(data="Testscreen ende")
-        self['status'].setText(_("Select your City and Press OK"))
+        self['status'].setText(_("Select the City and Press Ok"))
         logout(data="Testscreen layout finish")
 
     def selectCity(self):
@@ -523,11 +548,13 @@ class TestScreen(Screen):
 
         if selected_city_tuple:
             selected_city = selected_city_tuple[0]
-            self.selected_city = selected_city  # Save selected city
-            logout(data="498 Selected City: {}".format(selected_city))  # Write selected city to the log file
+            self.selected_city = selected_city  # Speichern Sie die ausgewählte Stadt
+            logout(data="498 Selected City: {}".format(selected_city))  # Schreiben Sie die ausgewählte Stadt in den Logfile
             if self.okCallback is not None:
                 self.okCallback(selected_city)
-            self.close()  # Close screen after selection
+            self.close()  # Schließen Sie den Bildschirm nach der Auswahl
+
+
 
 
 class WeatherHandler():
@@ -607,6 +634,8 @@ class WeatherHandler():
         logout(data="Python 2 get skydirs")
         def getSkydirs(self):
             return self.skydirs
+
+
 
 
     def getCacheData(self):
@@ -742,6 +771,7 @@ class WeatherHandler():
     logout(data="WeatherHandler ende")
 
 
+
 def main(session, **kwargs):
     logout(data="main")
     session.open(OAWeatherPlugin)
@@ -793,7 +823,7 @@ class OAWeatherPlugin(Screen):
             if screen.get("name") == "OAWeatherPlugin":
                 logout(data="screen get name")
                 skintext = tostring(screen).decode()
-                for key in list(params.keys()):
+                for key in params.keys():
                     logout(data="screen key")
                     try:
                         logout(data="screen key try")
@@ -807,8 +837,8 @@ class OAWeatherPlugin(Screen):
         Screen.__init__(self, session)
         self.title = _("Weather Plugin")
 
-        New_keymap = '/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/keymap.xml'
-        readKeymap(New_keymap)
+        Neue_keymap = '/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/keymap.xml'
+        readKeymap(Neue_keymap)
 
         self["key_blue"] = StaticText(_("Menu"))
 
@@ -845,6 +875,8 @@ class OAWeatherPlugin(Screen):
             logout(data="startrun-callback 1")
 
 
+
+
     def clearFields(self):
         logout(data="clearfields")
         for i in range(1, 6):
@@ -858,6 +890,8 @@ class OAWeatherPlugin(Screen):
         logout(data="Python 2 getval")
         def getVal(self, key):
             return self.data.get(key, self.na) if self.data else self.na
+
+
 
 
     if sys.version_info[0] >= 3:
@@ -878,6 +912,9 @@ class OAWeatherPlugin(Screen):
                 if key in current:
                     value = current.get(key, default)
             return value
+
+
+
 
 
     def getWeatherDataCallback(self):
