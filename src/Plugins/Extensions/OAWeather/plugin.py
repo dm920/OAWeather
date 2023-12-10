@@ -16,7 +16,7 @@
 # along with OAWeather.  If not, see <http://www.gnu.org/licenses/>.
 
 # Some parts are taken from MetrixHD skin and MSNWeather Plugin.
-from __future__ import print_function
+
 from os import remove, listdir
 from os.path import isfile, exists, getmtime, join
 from pickle import dump, load
@@ -823,7 +823,7 @@ class OAWeatherPlugin(Screen):
             if screen.get("name") == "OAWeatherPlugin":
                 logout(data="screen get name")
                 skintext = tostring(screen).decode()
-                for key in params.keys():
+                for key in list(params.keys()):
                     logout(data="screen key")
                     try:
                         logout(data="screen key try")
