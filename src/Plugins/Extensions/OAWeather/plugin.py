@@ -174,10 +174,10 @@ class WeatherSettingsViewNew(ConfigListScreen, Screen):
             <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,475" size="1280,40" text="Enter your City Name - Virtual KeyBoard = Press OK" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#0abab5" />
             <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,505" size="1280,40" text="Use Red Button after entering your City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#00ffffff" />
             <eLabel backgroundColor="#00000000" font="Regular; 28" position="00,535" size="1280,40" text="Please Restart E2 after saving your City Name" transparent="1" halign="center" valign="center" zPosition="2" foregroundColor="#cc7722" />
-            <ePixmap position="30,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/red.png" transparent="1" alphatest="blend" />
-            <ePixmap position="330,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/green.png"  transparent="1" alphatest="blend" />
-            <ePixmap position="630,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/yellow.png"  transparent="1" alphatest="blend" />
-            <ePixmap position="930,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/blue.png"  transparent="1" alphatest="blend" />
+            <ePixmap position="30,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
+            <ePixmap position="330,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/green.png"  transparent="1" alphatest="blend" />
+            <ePixmap position="630,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/yellow.png"  transparent="1" alphatest="blend" />
+            <ePixmap position="930,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/blue.png"  transparent="1" alphatest="blend" />
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_green" render="Label" position="310,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
             <widget source="key_yellow" render="Label" position="610,570" zPosition="5" size="280,50" font="Regular;27" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
@@ -479,7 +479,7 @@ class TestScreen(Screen):
     skin = """
     <screen name="TestScreen" position="center,center" size="1920,1080" backgroundColor="#00000000" transparent="0"  >
             <eLabel position="0,0" size="1920,1080" backgroundColor="#00000000" transparent="0" zPosition="0" />
-            <ePixmap position="10,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/MSNWeather/Images/red.png" transparent="1" alphatest="blend" />
+            <ePixmap position="10,590" zPosition="3" size="240,50" pixmap="/usr/lib/enigma2/python/Plugins/Extensions/OAWeather/Images/red.png" transparent="1" alphatest="blend" />
             <widget name="meinelist" position="100,20" size="1000,430" font="Regular;30" itemHeight="45" backgroundColor="#00000000" foregroundColor="#00ffffff" transparent="0" zPosition="3" scrollbarMode="showOnDemand" />
             <widget name="status" font="Regular; 25" position="100,470" size="1000,40" foregroundColor ="#0000ff00" backgroundColor="#00000000" transparent="0" zPosition="3" halign="center" valign="center" />
             <widget source="key_red" render="Label" position="10,570" zPosition="5" size="240,50" font="Regular;30" halign="center" valign="center" backgroundColor="#00313040" foregroundColor="#00ffffff" transparent="1" />
